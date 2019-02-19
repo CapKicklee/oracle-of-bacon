@@ -70,7 +70,6 @@ public class APIEndPoint {
 
     @Get("actor?name=:actorName")
     public String getActorByName(String actorName) {
-        System.out.println("allo");
-        return this.mongoDbRepository.getActorByName(actorName);
+        return this.mongoDbRepository.getActorByName(actorName).get().toJson();
     }
 }
