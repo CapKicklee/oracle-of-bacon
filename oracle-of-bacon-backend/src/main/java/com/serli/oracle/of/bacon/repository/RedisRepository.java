@@ -6,7 +6,7 @@ import java.util.List;
 
 public class RedisRepository {
     private final Jedis jedis;
-    private final KEY = "searches"
+    private final String KEY = "searches";
 
     public RedisRepository() {
         this.jedis = new Jedis("localhost");
@@ -20,7 +20,7 @@ public class RedisRepository {
      * Ajoute l'élément recherché en début de cache avant de garder les 10 derniers 
      */
     public void addSearchToCache(String name) {
-        jedis.lpush(KEY, name)
-        jedis.ltrim(KEY, 0, 9)
+        jedis.lpush(KEY, name);
+        jedis.ltrim(KEY, 0, 9);
     }
 }

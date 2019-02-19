@@ -21,7 +21,7 @@
       };
     },
   };
-</script>
+  </script>
 
 <style scoped>
   .last-10-searches {
