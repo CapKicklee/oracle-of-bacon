@@ -16,9 +16,9 @@
         .selector('node')
           .style({
             'background-color': (node) => {
-              if (node.data('type') === 'Movie') {
+              if (node.data('type') === 'Movies') {
                 return '#617d57';
-              } else if (node.data('type') === 'Actor') {
+              } else if (node.data('type') === 'Actors') {
                 return '#30514c';
               }
               return 'black';
@@ -38,9 +38,9 @@
             'text-valign': 'center',
             'text-halign': 'center',
             'text-outline-color': (node) => {
-              if (node.data('type') === 'Movie') {
+              if (node.data('type') === 'Movies') {
                 return '#617d57';
-              } else if (node.data('type') === 'Actor') {
+              } else if (node.data('type') === 'Actors') {
                 return '#30514c';
               }
               return 'black';
