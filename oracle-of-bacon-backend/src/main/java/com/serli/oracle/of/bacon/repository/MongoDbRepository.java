@@ -14,7 +14,6 @@ public class MongoDbRepository {
     }
 
     public Optional<Document> getActorByName(String name) {
-        // TODO implement actor fetch
-        return null;
+        return Optional.ofNullable(this.actorCollection.find(Filters.eq("name", name)).first());
     }
 }
