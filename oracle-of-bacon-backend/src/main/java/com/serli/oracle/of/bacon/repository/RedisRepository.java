@@ -6,13 +6,21 @@ import java.util.List;
 
 public class RedisRepository {
     private final Jedis jedis;
+    private final KEY = "searches"
 
     public RedisRepository() {
         this.jedis = new Jedis("localhost");
     }
 
     public List<String> getLastTenSearches() {
-        // TODO implement last 10 searchs
-        return null;
+        return jedis.lrange(KEY,0,-1);
+    }
+
+    /**
+     * Ajoute l'élément recherché en début de cache avant de garder les 10 derniers 
+     */
+    public void addSearchToCache(String name) {
+        jedis.lpush(KEY, name)
+        jedis.ltrim(KEY, 0, 9)
     }
 }
