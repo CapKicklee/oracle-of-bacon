@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 public class Neo4JRepository {
     private final Driver driver;
+    private static final String KEVIN_BACON = "Bacon, Kevin (I)";
 
     public Neo4JRepository() {
         this.driver = GraphDatabase.driver("bolt://localhost:7687", AuthTokens.basic("neo4j", "password"));
@@ -31,7 +32,7 @@ public class Neo4JRepository {
 
         // TODO implement Oracle of Bacon
         Transaction transaction = session.beginTransaction();
-        Statement statement = new Statement("MATCH p=shortestPath((bacon {name:'Bacon, Kevin (I)'})-[:PLAYED_IN*]-(other {name:'" + actorName + "'})) RETURN p");
+        Statement statement = new Statement("MATCH p=shortestPath((bacon {name:'" + KEVIN_BACON + "'})-[:PLAYED_IN*]-(other {name:'" + actorName + "'})) RETURN p");
         StatementResult result = transaction.run(statement);
 
         List<GraphItem> resultList = 
