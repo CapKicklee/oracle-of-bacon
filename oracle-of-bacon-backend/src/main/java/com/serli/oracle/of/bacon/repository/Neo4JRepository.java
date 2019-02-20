@@ -22,17 +22,22 @@ import java.util.stream.Collectors;
 public class Neo4JRepository {
     private final Driver driver;
     private static final String KEVIN_BACON = "Bacon, Kevin (I)";
+    private static final String USER_KEY = "neo4j";
+    private static final String PASSWORD_KEY = "password";
+    private static final String ACTORS_KEY = "Actors";
+    private static final String NAME_KEY = "name";
+    private static final String TITLE_KEY = "title";
+    private static final String BOLT_SERVER_KEY = "password";
 
     public Neo4JRepository() {
-        this.driver = GraphDatabase.driver("bolt://localhost:7687", AuthTokens.basic("neo4j", "password"));
+        this.driver = GraphDatabase.driver(BOLT_SERVER_KEY, AuthTokens.basic(USER, PASSWORD));
     }
 
     public List<GraphItem> getConnectionsToKevinBacon(String actorName) {
         Session session = driver.session();
-
-        // TODO implement Oracle of Bacon
         Transaction transaction = session.beginTransaction();
-        Statement statement = new Statement("MATCH p=shortestPath((bacon {name:'" + KEVIN_BACON + "'})-[:PLAYED_IN*]-(other {name:'" + actorName + "'})) RETURN p");
+        Statement statement = new Statement(
+            "MATCH p=shortestPath((bacon {name:'" + KEVIN_BACON + "'})-[:PLAYED_IN*]-(other {name:'" + actorName + "'})) RETURN p");
         StatementResult result = transaction.run(statement);
 
         List<GraphItem> resultList = 
@@ -60,7 +65,7 @@ public class Neo4JRepository {
         while(nodeIterator.hasNext()) {
             Node currentNode = nodeIterator.next();
             String type = currentNode.labels().iterator().next();
-            String value = type.equals("Actors") ? "name" : "title";
+            String value = ACTORS_KEY.equals(type) ? NAME_KEY : TITLE_KEY;
             GraphNode node = new GraphNode(currentNode.id(), currentNode.get(value).asString(), type);
             graphItems.add(node);
         }

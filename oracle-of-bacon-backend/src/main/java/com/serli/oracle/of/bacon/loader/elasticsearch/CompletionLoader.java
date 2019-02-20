@@ -30,6 +30,11 @@ import java.util.function.BiConsumer;
 
 public class CompletionLoader {
     private static AtomicInteger count = new AtomicInteger(0);
+    private static final String ACTORS_KEY = "actors";
+    private static final String ACTOR_KEY = "actor";
+    private static final String NAME_KEY = "name";
+    private static final String SUGGEST_KEY = "suggest";
+    private static final String SPACE_REGEXP = "\\s+";
 
     public static void main(String[] args) throws IOException, InterruptedException {
         RestHighLevelClient client = ElasticSearchRepository.createClient();
@@ -40,11 +45,11 @@ public class CompletionLoader {
             System.exit(-1);
         }
         
-        CreateIndexRequest indexRequest = new CreateIndexRequest("actors");
+        CreateIndexRequest indexRequest = new CreateIndexRequest(ACTORS_KEY);
         CreateIndexResponse createIndexResponse = client.indices().create(indexRequest);
         
-        PutMappingRequest request = new PutMappingRequest("actors"); 
-        request.type("actor");
+        PutMappingRequest request = new PutMappingRequest(ACTORS_KEY); 
+        request.type(ACTOR_KEY);
         String jsonBody = "{ "
         		+ "\"properties\": "
         		+ "{ \"suggest\":    "
@@ -66,7 +71,6 @@ public class CompletionLoader {
             public void afterBulk(long executionId, BulkRequest request,
                     BulkResponse response) {
                 count.incrementAndGet();
-                System.out.println("Inserted total of " + count.get() + " actors");
             }
 
             @Override
@@ -97,23 +101,18 @@ public class CompletionLoader {
                     		count.incrementAndGet();
                     		return;
                     	}
-                        IndexRequest requestLine = new IndexRequest("actors", "actor");
+                        IndexRequest requestLine = new IndexRequest(ACTORS_KEY, ACTOR_KEY);
                     	Map<String, Object> jsonMap = new HashMap<>();
                         String name = line.substring(1, line.length()-1);
-                        jsonMap.put("name", name);
-                        String[] splittedName = name.split("\\s+");
-                        jsonMap.put("suggest", splittedName);
+                        jsonMap.put(NAME_KEY, name);
+                        String[] splittedName = name.split(SPACE_REGEXP);
+                        jsonMap.put(SUGGEST_KEY, splittedName);
                         requestLine.source(jsonMap);
-                        //TODO ElasticSearch insert
                         bulkProcessor.add(requestLine);
                     });
             bulkProcessor.close();            
         }
-        
-        
-
-        System.out.println("Inserted total of " + count.get() + " actors");
-
+        System.out.println("Inserted total of " + count.get() + " actors bulk");
         client.close();
     }
 }

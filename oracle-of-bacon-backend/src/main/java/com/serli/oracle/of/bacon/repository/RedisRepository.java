@@ -6,10 +6,11 @@ import java.util.List;
 
 public class RedisRepository {
     private final Jedis jedis;
-    private final String KEY = "searches";
+    private static final String SEARCHES_KEY = "searches";
+    private static final String HOST_KEY = "localhost"
 
     public RedisRepository() {
-        this.jedis = new Jedis("localhost");
+        this.jedis = new Jedis(HOST_KEY);
     }
 
     public List<String> getLastTenSearches() {
