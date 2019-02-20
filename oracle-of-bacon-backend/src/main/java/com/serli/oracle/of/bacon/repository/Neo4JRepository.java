@@ -30,7 +30,7 @@ public class Neo4JRepository {
     private static final String BOLT_SERVER_KEY = "password";
 
     public Neo4JRepository() {
-        this.driver = GraphDatabase.driver(BOLT_SERVER_KEY, AuthTokens.basic(USER, PASSWORD));
+        this.driver = GraphDatabase.driver(BOLT_SERVER_KEY, AuthTokens.basic(USER_KEY, PASSWORD_KEY));
     }
 
     public List<GraphItem> getConnectionsToKevinBacon(String actorName) {
